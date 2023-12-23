@@ -3,11 +3,7 @@
 use core::panic::PanicInfo;
 mod vga_buffer;
 //这个函数将在panic时被调用
-#[panic_handler]
-fn panic(info:&PanicInfo)->!{
-    println!("{}",info);
-    loop{}
-}
+
 static HELLO:&[u8] = b"Hello World!";
 
 #[no_mangle]//不重整函数名
@@ -23,9 +19,25 @@ pub extern "C" fn _start()->!{
     // use core::fmt::Write;
     // vga_buffer::WRITER.lock().write_str("Hello again").unwrap();
     // write!(vga_buffer::WRITER.lock(),", some numbers: {} {}",42,1.337).unwrap();
-    println!("Hello World{}","!");
+    println!("Welcome to ZcoreOS {}","!");
     loop{}
 }
 
+#[panic_handler]
+fn panic(info:&PanicInfo)->!{
+    println!("{}",info);
+    loop{}
+}
 
+//为我们的内核实现自定义测试框架
+// #![feature(custom_test_frameworks)]
+// #![test_runner(crate::test_runner)]
 
+// //我们的runner会打印一个简短的debug信息
+// #[cfg(test)]
+// fn test_runner(tests:&[&dyn Fn()]){
+//     println!("Running {} tests",tests.len());
+//     for test in tests{
+//         test();
+//     }
+// }
