@@ -1,23 +1,30 @@
 [package]
 name = "blog_os"
 version = "0.1.0"
+authors = ["jwz"]
 edition = "2018"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-# 使用 `cargo build` 编译时需要的配置
-[profile.dev]
-panic = "abort" # 禁用panic时栈展开
-
-# 使用 `cargo build --release` 编译时需要的配置
-[profile.release]
-panic = "abort" # 禁用 panic 时栈展开
 
 [dependencies]
 bootloader = "0.9.8"
 volatile = "0.2.6"
 spin = "0.5.2"
+x86_64 = "0.14.2"
+uart_16550 = "0.2.0"
 
 [dependencies.lazy_static]
 version = "1.0"
 features = ["spin_no_std"]
 
+
+[package.metadata.bootimage]
+test-timeout = 10    #(in seconds) 测试最多超时时间
+test-args = [
+    "-device", "isa-debug-exit,iobase=0xf4,iosize=0x04", "-serial", "stdio",  #将测试结果从串口重定向到标准输出
+    "-display", "none"   #关闭QEMU图形窗口
+]
+test-success-exit-code = 33         # (0x10 << 1) | 1 #定义成功码
+
+[[test]]
+name = "should_panic"
+harness = false

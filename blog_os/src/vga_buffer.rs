@@ -48,24 +48,24 @@ struct ScreenChar{
     color_code:ColorCode,
 }
 
-const BUFFER_HEIGHT:usize = 25;
+pub const BUFFER_HEIGHT:usize = 25;
 const BUFFER_WIDTH:usize = 80;
 //我们再次使用 repr(transparent)，来确保类型和它的单个成员有相同的内存布局。
 #[repr(transparent)]
 struct Buffer{
     //这里Volatile类型是一个泛型
     //确保了我们不会指向普通的写入操作
-    chars:[[Volatile<ScreenChar>;BUFFER_WIDTH];BUFFER_HEIGHT],
+    pub chars:[[Volatile<ScreenChar>;BUFFER_WIDTH];BUFFER_HEIGHT],
 }
 
 //为了输出字符到屏幕,我们来创建一个Writer类型
 pub struct Writer{
     ///要写入的最后一行所在列的位置
-    column_position:usize,
+    pub column_position:usize,
     ///事先设置好的前景色和背景色
-    color_code:ColorCode,
+    pub color_code:ColorCode,
     ///区间的VGA字符缓冲区
-    buffer:&'static mut Buffer,
+    pub buffer:&'static mut Buffer,
 }
 
 //打印字符:我们可以使用Writer来更改缓冲区内的字符了
