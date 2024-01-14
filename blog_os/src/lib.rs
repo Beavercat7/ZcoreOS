@@ -8,6 +8,7 @@ use core::panic::PanicInfo;
 pub mod serial;
 pub mod vga_buffer;
 pub mod interrupts;
+pub mod gdt;
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 #[repr(u32)]
 pub enum QemuExitCode {
@@ -77,5 +78,6 @@ fn panic(info: &PanicInfo) -> ! {
 
 //中断处理
 pub fn init(){
+    gdt::init();
     interrupts::init_idt();
 }
